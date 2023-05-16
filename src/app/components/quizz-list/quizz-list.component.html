@@ -1,0 +1,53 @@
+<ng-container *ngIf="quizzes.length">
+  <table mat-table [dataSource]="quizzes" class="mat-elevation-z8">
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Nom</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.name === quizzNames.HEADS ? "All Stars" : "Challengers" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="score">
+      <th mat-header-cell *matHeaderCellDef>Score</th>
+      <td mat-cell *matCellDef="let element">{{ element.score }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="total-time">
+      <th mat-header-cell *matHeaderCellDef>Temps total</th>
+      <td mat-cell *matCellDef="let element">{{ element.quizzEndTime }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="average-time">
+      <th mat-header-cell *matHeaderCellDef>Temps moyen</th>
+      <td mat-cell *matCellDef="let element">{{ element.quizzEndTime }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="50-50">
+      <th mat-header-cell *matHeaderCellDef>50/50</th>
+      <td mat-cell *matCellDef="let element">
+        <mat-icon
+          *ngIf="element.canUseFiftyFiftyJoker; else alreadyUsedFiftyFifty"
+          >hourglass_full</mat-icon
+        >
+        <ng-template #alreadyUsedFiftyFifty>
+          <mat-icon>hourglass_empty</mat-icon>
+        </ng-template>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="public-vote">
+      <th mat-header-cell *matHeaderCellDef>Vote du public</th>
+      <td mat-cell *matCellDef="let element">
+        <mat-icon *ngIf="element.canUsePublicVote; else alreadyUsedPublicVote"
+          >hourglass_full</mat-icon
+        >
+        <ng-template #alreadyUsedPublicVote>
+          <mat-icon>hourglass_empty</mat-icon>
+        </ng-template>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="tableHeaders"></tr>
+    <tr mat-row *matRowDef="let row; columns: tableHeaders"></tr>
+  </table>
+</ng-container>
