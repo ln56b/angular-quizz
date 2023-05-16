@@ -30,11 +30,11 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  startGame(): void {
+  startQuizz(): void {
     this.quizzService
       .startQuizz()
-      .subscribe((apiRes) =>
-        this.router.navigate(['/', 'quizz', 'edit', apiRes.quizz.id])
+      .subscribe((quizz) =>
+        this.router.navigate(['/', 'quizz', 'edit', quizz.id])
       );
   }
 }
