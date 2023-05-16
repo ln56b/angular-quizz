@@ -1,0 +1,40 @@
+<button mat-flat-button color="primary" routerLink="['/']">
+  <mat-icon>arrow_back</mat-icon>Retour
+</button>
+
+<mat-stepper orientation="vertical" [linear]="true" #stepper>
+  <form [formGroup]="questionsFormGroup">
+    <mat-step [stepControl]="questionsFormGroup">
+      <ng-template matStepLabel>{{ "// TODO" }}</ng-template>
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input
+          matInput
+          placeholder="Last name, First name"
+          formControlName="question1"
+          required
+        />
+      </mat-form-field>
+    </mat-step>
+    <mat-step [stepControl]="questionsFormGroup">
+      <ng-template matStepLabel>Fill out your name</ng-template>
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input
+          matInput
+          placeholder="Last name, First name"
+          formControlName="question2"
+          required
+        />
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </mat-step>
+  </form>
+</mat-stepper>
+
+<div>
+  <button mat-button>Retour</button>
+  <button mat-button>Suivant</button>
+</div>
