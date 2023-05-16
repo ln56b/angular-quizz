@@ -20,7 +20,7 @@ export class QuizzService {
 
   startQuizz(): Observable<Quizz> {
     return this.http
-      .post<Quizz>(this.ENDPOINT_URL, {})
-      .pipe(map((apiRes) => apiRes));
+      .post<{ quizz: Quizz }>(this.ENDPOINT_URL, {})
+      .pipe(map((apiRes) => apiRes.quizz));
   }
 }
