@@ -1,6 +1,19 @@
 <div>
-  <button mat-flat-button color="primary" (click)="startQuizz()">
-    Commencer un nouveau Quizz
+  <h3>Commencer un nouveau Quizz</h3>
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="startQuizz(quizzNames.HEADS)"
+  >
+    Quizz All Stars
+  </button>
+
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="startQuizz(quizzNames.TAILS)"
+  >
+    Quizz Challengers
   </button>
   <h3>Ranking</h3>
   <app-quizz-list [quizzes]="quizzes"></app-quizz-list>
