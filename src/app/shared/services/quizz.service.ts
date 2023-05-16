@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, map, tap } from 'rxjs';
 import { environment } from 'src/app/environments/environment';
-import { Quizz } from '../models/quizz.models';
+import { Quizz, QuizzNames } from '../models/quizz.models';
 
 @Injectable({
   providedIn: 'root',
@@ -18,9 +18,9 @@ export class QuizzService {
       .pipe(map((apiRes) => apiRes));
   }
 
-  startQuizz(): Observable<Quizz> {
+  startQuizz(name: QuizzNames): Observable<Quizz> {
     return this.http
-      .post<{ quizz: Quizz }>(this.ENDPOINT_URL, {})
+      .post<{ quizz: Quizz }>(this.ENDPOINT_URL, { name })
       .pipe(map((apiRes) => apiRes.quizz));
   }
 }
