@@ -7,6 +7,7 @@ export interface Category {
 
 export interface Quizz {
   id: number;
+  name: string;
   categories: Category[];
   selectedQuestionIndex: number;
   canUseFiftyFiftyJoker: boolean;
@@ -14,4 +15,9 @@ export interface Quizz {
   score: number;
   quizzStartedTime: string;
   quizzEndTime: string;
+}
+
+export enum QuizzNames {
+  HEADS = 'heads',
+  TAILS = 'tails',
 }
