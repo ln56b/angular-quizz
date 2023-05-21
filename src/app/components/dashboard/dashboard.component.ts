@@ -2,13 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import { Router } from '@angular/router';
-import { Quizz, QuizzNames } from 'src/app/shared/models/quizz.models';
+import { Router, RouterModule } from '@angular/router';
+import { QuizzHistory, QuizzNames } from 'src/app/shared/models/quizz.models';
 import { QuizzService } from '../../shared/services/quizz.service';
 import { QuizzListComponent } from '../quizz-list/quizz-list.component';
 
 const QUIZZ_APP = [QuizzListComponent];
-const EXTERNAL = [CommonModule];
+const EXTERNAL = [CommonModule, RouterModule];
 const MATERIAL = [MatButtonModule, MatInputModule];
 
 @Component({
@@ -19,15 +19,28 @@ const MATERIAL = [MatButtonModule, MatInputModule];
   imports: [EXTERNAL, MATERIAL, QUIZZ_APP],
 })
 export class DashboardComponent implements OnInit {
-  quizzes: Quizz[] = [];
+  quizzes: QuizzHistory[] = [];
   quizzNames = QuizzNames;
 
   constructor(private quizzService: QuizzService, private router: Router) {}
 
   ngOnInit(): void {
     this.quizzService.loadQuizzes().subscribe((quizzes) => {
-      this.quizzes = quizzes;
+      this.quizzes = quizzes.map((q) => ({
+        ...q,
+        totalTime:
+          new Date(q.quizzEndTime).getMinutes() -
+          new Date(q.quizzStartedTime).getMinutes(),
+        averageTime:
+          (new Date(q.quizzEndTime).getMinutes() -
+            new Date(q.quizzStartedTime).getMinutes()) /
+          10,
+      }));
     });
+  }
+
+  onDeleteQuizz(id: number): void {
+    console.log('TODO'); // TODO
   }
 
   startQuizz(name: QuizzNames): void {

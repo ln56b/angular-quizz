@@ -1,5 +1,5 @@
 <div>
-  <h3>Commencer un nouveau Quizz</h3>
+  <h3>Choisis un quizz pour commencer à jouer</h3>
   <button
     mat-flat-button
     color="primary"
@@ -16,5 +16,10 @@
     Quizz Challengers
   </button>
   <h3>Ranking</h3>
-  <app-quizz-list [quizzes]="quizzes"></app-quizz-list>
+  <app-quizz-list
+    *ngIf="quizzes.length; else noQuizzes"
+    [quizzes]="quizzes"
+    (deleteQuizzEvent)="onDeleteQuizz($event)"
+  ></app-quizz-list>
+  <ng-template #noQuizzes>Joue à ton premier quizz !</ng-template>
 </div>

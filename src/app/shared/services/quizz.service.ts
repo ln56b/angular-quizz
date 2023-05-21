@@ -23,4 +23,8 @@ export class QuizzService {
       .post<{ quizz: Quizz }>(this.ENDPOINT_URL, { name })
       .pipe(map((apiRes) => apiRes.quizz));
   }
+
+  getQuizz(id: number): Observable<Quizz> {
+    return this.http.get<Quizz>(`${this.ENDPOINT_URL}/${id}`);
+  }
 }

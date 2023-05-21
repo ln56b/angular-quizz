@@ -2,15 +2,24 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   Input,
-  OnInit,
+  Output,
 } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
-import { Quizz, QuizzNames } from 'src/app/shared/models/quizz.models';
+import { MatMenuModule } from '@angular/material/menu';
+import { QuizzHistory, QuizzNames } from 'src/app/shared/models/quizz.models';
+import { RouterModule } from '@angular/router';
 
-const EXTERNAL = [CommonModule];
-const MATERIAL = [MatTableModule, MatIconModule];
+const EXTERNAL = [CommonModule, RouterModule];
+const MATERIAL = [
+  MatTableModule,
+  MatIconModule,
+  MatButtonModule,
+  MatMenuModule,
+];
 
 @Component({
   selector: 'app-quizz-list',
@@ -20,8 +29,9 @@ const MATERIAL = [MatTableModule, MatIconModule];
   imports: [EXTERNAL, MATERIAL],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class QuizzListComponent implements OnInit {
-  @Input() quizzes: Quizz[] = [];
+export class QuizzListComponent {
+  @Input() quizzes: QuizzHistory[] = [];
+  @Output() deleteQuizzEvent = new EventEmitter<number>();
 
   quizzNames = QuizzNames;
 
@@ -32,7 +42,10 @@ export class QuizzListComponent implements OnInit {
     'average-time',
     '50-50',
     'public-vote',
+    'replay',
   ];
 
-  ngOnInit(): void {}
+  deleteQuizz(id: number): void {
+    this.deleteQuizzEvent.emit(id);
+  }
 }

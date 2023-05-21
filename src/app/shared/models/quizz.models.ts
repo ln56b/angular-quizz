@@ -1,8 +1,9 @@
-import { Question } from './question.model';
+import { Question, Answer } from './question.model';
 
 export interface Category {
   hero: string;
   question: Question;
+  answers: Answer[];
 }
 
 export interface Quizz {
@@ -13,8 +14,14 @@ export interface Quizz {
   canUseFiftyFiftyJoker: boolean;
   canUsePublicVote: boolean;
   score: number;
-  quizzStartedTime: string;
-  quizzEndTime: string;
+  userAnswers: Answer[];
+  quizzStartedTime: Date;
+  quizzEndTime: Date;
+}
+
+export interface QuizzHistory extends Quizz {
+  totalTime: number;
+  averageTime: number;
 }
 
 export enum QuizzNames {

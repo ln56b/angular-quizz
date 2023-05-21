@@ -13,13 +13,13 @@
     </ng-container>
 
     <ng-container matColumnDef="total-time">
-      <th mat-header-cell *matHeaderCellDef>Temps total</th>
-      <td mat-cell *matCellDef="let element">{{ element.quizzEndTime }}</td>
+      <th mat-header-cell *matHeaderCellDef>Temps total (min)</th>
+      <td mat-cell *matCellDef="let element">{{ element.totalTime }}</td>
     </ng-container>
 
     <ng-container matColumnDef="average-time">
-      <th mat-header-cell *matHeaderCellDef>Temps moyen</th>
-      <td mat-cell *matCellDef="let element">{{ element.quizzEndTime }}</td>
+      <th mat-header-cell *matHeaderCellDef>Temps moyen (min)</th>
+      <td mat-cell *matCellDef="let element">{{ element.averageTime }}</td>
     </ng-container>
 
     <ng-container matColumnDef="50-50">
@@ -45,6 +45,36 @@
           <mat-icon>hourglass_empty</mat-icon>
         </ng-template>
       </td>
+    </ng-container>
+
+    <ng-container matColumnDef="replay">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let element">
+        <button
+          mat-icon-button
+          aria-label="Example icon button with a vertical three dot icon"
+          [matMenuTriggerFor]="menu"
+        >
+          <mat-icon>more_vert</mat-icon>
+          <mat-menu #menu="matMenu">
+            <button
+              [routerLink]="['/', 'quizz', 'edit', element.id]"
+              mat-menu-item
+            >
+              Rejouer<mat-icon>replay</mat-icon>
+            </button>
+            <button (click)="deleteQuizz(element.id)" mat-menu-item>
+              Supprimer<mat-icon>delete</mat-icon>
+            </button>
+          </mat-menu>
+        </button>
+      </td>
+      <button
+        mat-icon-button
+        aria-label="Example icon button with a vertical three dot icon"
+      >
+        <mat-icon>more_vert</mat-icon>
+      </button>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="tableHeaders"></tr>
