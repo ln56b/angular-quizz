@@ -1,40 +1,36 @@
-<button mat-flat-button color="primary" routerLink="['/']">
-  <mat-icon>arrow_back</mat-icon>Retour
-</button>
+<ng-container *ngIf="quizz">
+  <div><mat-icon>av_timer</mat-icon>{{ getTimer }}</div>
+  <ng-container *ngIf="!isCompleted; else endedQuizz">
+    <div>
+      <button
+        [disabled]="!quizz.canUseFiftyFiftyJoker"
+        (click)="useJoker('fifty-fifty')"
+      >
+        50 / 50
+      </button>
 
-<mat-stepper orientation="vertical" [linear]="true" #stepper>
-  <form [formGroup]="questionsFormGroup">
-    <mat-step [stepControl]="questionsFormGroup">
-      <ng-template matStepLabel>{{ "// TODO" }}</ng-template>
-      <mat-form-field>
-        <mat-label>Name</mat-label>
-        <input
-          matInput
-          placeholder="Last name, First name"
-          formControlName="question1"
-          required
-        />
-      </mat-form-field>
-    </mat-step>
-    <mat-step [stepControl]="questionsFormGroup">
-      <ng-template matStepLabel>Fill out your name</ng-template>
-      <mat-form-field>
-        <mat-label>Name</mat-label>
-        <input
-          matInput
-          placeholder="Last name, First name"
-          formControlName="question2"
-          required
-        />
-      </mat-form-field>
-      <div>
-        <button mat-button matStepperNext>Next</button>
-      </div>
-    </mat-step>
-  </form>
-</mat-stepper>
+      <button
+        [disabled]="!quizz.canUsePublicVote"
+        (click)="useJoker('public-vote')"
+      >
+        public vote
+      </button>
+    </div>
+    <p>{{ currentQuestionIndex + 1 }}</p>
+    <p>{{ quizz.categories[currentQuestionIndex].question.text }}</p>
+    <div *ngFor="let answer of displayedAnswers">
+      <p (click)="provideAnswer(answer)">{{ answer.label }}</p>
+    </div>
 
-<div>
-  <button mat-button>Retour</button>
-  <button mat-button>Suivant</button>
-</div>
+    <button [disabled]="missingAnswer" (click)="goToNextQuestion()">
+      question suivante
+    </button>
+  </ng-container>
+
+  <ng-template #endedQuizz>
+    <p>Tu as terminé le quizz en {{ timer }} sec</p>
+    <p>{{ quizz.score }}</p>
+
+    <button routerLink="['/']">Voir le ranking</button>
+  </ng-template>
+</ng-container>
