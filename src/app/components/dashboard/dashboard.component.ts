@@ -14,7 +14,7 @@ const MATERIAL = [MatButtonModule, MatInputModule];
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
+  styleUrls: [],
   standalone: true,
   imports: [EXTERNAL, MATERIAL, QUIZZ_APP],
 })

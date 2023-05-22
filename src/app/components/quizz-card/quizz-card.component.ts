@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 @Component({
   selector: 'app-quizz-card',
   templateUrl: './quizz-card.component.html',
-  styleUrls: ['./quizz-card.component.scss'],
+  styleUrls: [],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

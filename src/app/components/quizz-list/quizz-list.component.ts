@@ -24,7 +24,7 @@ const MATERIAL = [
 @Component({
   selector: 'app-quizz-list',
   templateUrl: './quizz-list.component.html',
-  styleUrls: ['./quizz-list.component.scss'],
+  styleUrls: [],
   standalone: true,
   imports: [EXTERNAL, MATERIAL],
   changeDetection: ChangeDetectionStrategy.OnPush,
