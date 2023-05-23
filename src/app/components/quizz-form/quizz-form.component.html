@@ -1,36 +1,110 @@
 <ng-container *ngIf="quizz">
-  <div><mat-icon>av_timer</mat-icon>{{ getTimer }}</div>
-  <ng-container *ngIf="!isCompleted; else endedQuizz">
-    <div>
-      <button
-        [disabled]="!quizz.canUseFiftyFiftyJoker"
-        (click)="useJoker('fifty-fifty')"
-      >
-        50 / 50
-      </button>
+  <div class="p-10">
+    <div class="flex flex-col">
+      <ng-container *ngIf="isCompleted; else endedQuizz">
+        <div class="flex justify-between">
+          <div class="flex gap-3">
+            <button
+              mat-flat-button
+              color="primary"
+              [disabled]="!quizz.canUseFiftyFiftyJoker"
+              (click)="useJoker('fifty-fifty')"
+            >
+              50 / 50
+            </button>
 
-      <button
-        [disabled]="!quizz.canUsePublicVote"
-        (click)="useJoker('public-vote')"
-      >
-        public vote
-      </button>
+            <button
+              mat-flat-button
+              color="primary"
+              [disabled]="!quizz.canUsePublicVote"
+              (click)="useJoker('public-vote')"
+            >
+              Public vote
+            </button>
+          </div>
+          <div class="flex py-3 text-lg">
+            <mat-icon color="primary">av_timer</mat-icon>
+            <span class="font-bold text-primary">{{ getTimer }} </span> sec
+            <p class="pl-3">
+              Question
+              <span class="font-bold text-primary">{{
+                quizz.selectedQuestionIndex + 1
+              }}</span
+              >/10
+            </p>
+          </div>
+        </div>
+
+        <div class="flex flex-col items-center my-5">
+          <h3 class="p-3 text-xl">
+            {{ quizz.categories[currentQuestionIndex].question.text }}
+          </h3>
+
+          <ng-container *ngIf="displayPublicVotes">
+            <p>A</p>
+            {{ publicVotes[0] }}%
+            <p>B</p>
+            {{ publicVotes[1] }}%
+            <p>C</p>
+            {{ publicVotes[2] }}%
+            <p>D</p>
+            {{ publicVotes[3] }}%
+          </ng-container>
+
+          <div class="flex flex-col items-center gap-3">
+            <mat-card
+              *ngFor="let answer of displayedAnswers"
+              class="my-2 w-[500px]"
+            >
+              <mat-card-actions>
+                <button
+                  mat-button
+                  (click)="provideAnswer(answer)"
+                  class="w-[100%]"
+                >
+                  {{ answer.label }}
+                </button>
+              </mat-card-actions>
+            </mat-card>
+          </div>
+          <button
+            mat-flat-button
+            color="primary"
+            [disabled]="missingAnswer"
+            (click)="goToNextQuestion()"
+            class="self-end mt-3"
+          >
+            question suivante
+          </button>
+        </div>
+      </ng-container>
+
+      <ng-template #endedQuizz>
+        <mat-card class="flex flex-col items-center py-3">
+          <div class="my-3 text-center">
+            <h3 class="p-3 text-xl">
+              Tu as terminé le quizz en
+              <span class="font-bold text-primary">{{ timer }}</span> sec
+            </h3>
+            <p class="text-xl">
+              Voici ton score :
+              <span class="font-bold text-primary">{{ quizz.score }}</span
+              >/10
+            </p>
+          </div>
+
+          <mat-card-actions>
+            <button
+              mat-flat-button
+              color="primary"
+              routerLink="['/']"
+              class="mt-3"
+            >
+              Voir le ranking
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </ng-template>
     </div>
-    <p>{{ currentQuestionIndex + 1 }}</p>
-    <p>{{ quizz.categories[currentQuestionIndex].question.text }}</p>
-    <div *ngFor="let answer of displayedAnswers">
-      <p (click)="provideAnswer(answer)">{{ answer.label }}</p>
-    </div>
-
-    <button [disabled]="missingAnswer" (click)="goToNextQuestion()">
-      question suivante
-    </button>
-  </ng-container>
-
-  <ng-template #endedQuizz>
-    <p>Tu as terminé le quizz en {{ timer }} sec</p>
-    <p>{{ quizz.score }}</p>
-
-    <button routerLink="['/']">Voir le ranking</button>
-  </ng-template>
+  </div>
 </ng-container>

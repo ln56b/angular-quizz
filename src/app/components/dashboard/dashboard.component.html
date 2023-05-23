@@ -1,27 +1,41 @@
-<div>
-  <h3>Choisis un quizz pour commencer à jouer</h3>
-  <button
-    mat-flat-button
-    color="primary"
-    (click)="startQuizz(quizzNames.HEADS)"
-  >
-    Quizz All Stars
-  </button>
+<div class="flex flex-col p-10">
+  <section class="flex flex-col">
+    <h2 class="self-center p-3 text-xl">
+      Choisis un quizz pour commencer à jouer
+    </h2>
+    <div class="flex justify-center gap-10 m-2">
+      <button
+        mat-flat-button
+        color="primary"
+        (click)="startQuizz(quizzNames.HEADS)"
+      >
+        Quizz All Stars
+      </button>
 
-  <button
-    mat-flat-button
-    color="primary"
-    (click)="startQuizz(quizzNames.TAILS)"
-  >
-    Quizz Challengers
-  </button>
-  <h3>Ranking</h3>
-  <app-quizz-list
-    *ngIf="quizzes.length; else noQuizzes"
-    [quizzes]="quizzes"
-    (deleteQuizzEvent)="onDeleteQuizz($event)"
-  ></app-quizz-list>
-  <ng-template #noQuizzes
-    >Aucun score à afficher. Tu n'as pas encore joué à un quizz.</ng-template
-  >
+      <button
+        mat-flat-button
+        color="primary"
+        (click)="startQuizz(quizzNames.TAILS)"
+      >
+        Quizz Challengers
+      </button>
+    </div>
+  </section>
+
+  <hr class="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
+
+  <section class="flex flex-col">
+    <h2 class="self-center p-3 text-xl">Ranking</h2>
+    <app-quizz-list
+      class="m-2"
+      *ngIf="quizzes.length; else noQuizzes"
+      [quizzes]="quizzes"
+      (deleteQuizzEvent)="onDeleteQuizz($event)"
+    ></app-quizz-list>
+    <ng-template #noQuizzes>
+      <p class="self-center p-2 text-lightGray text-l">
+        Aucun score à afficher. Tu n'as pas encore joué à un quizz.
+      </p>
+    </ng-template>
+  </section>
 </div>

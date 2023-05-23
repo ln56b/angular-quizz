@@ -29,11 +29,11 @@ export class DashboardComponent implements OnInit {
       this.quizzes = quizzes.map((q) => ({
         ...q,
         totalTime:
-          new Date(q.quizzEndTime).getMinutes() -
-          new Date(q.quizzStartedTime).getMinutes(),
+          new Date(q.quizzEndTime).getSeconds() -
+          new Date(q.quizzStartedTime).getSeconds(),
         averageTime:
-          (new Date(q.quizzEndTime).getMinutes() -
-            new Date(q.quizzStartedTime).getMinutes()) /
+          (new Date(q.quizzEndTime).getSeconds() -
+            new Date(q.quizzStartedTime).getSeconds()) /
           10,
       }));
     });
