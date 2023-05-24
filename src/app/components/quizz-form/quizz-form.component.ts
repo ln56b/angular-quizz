@@ -110,12 +110,30 @@ export class QuizzFormComponent implements OnInit {
   }
 
   private _getPublicVotes(): void {
-    // TODO
     this.displayPublicVotes = true;
-    const answers = this.quizz.categories[this.currentQuestionIndex].answers;
 
-    const isCorrect = answers.find((a) => a.isCorrect);
-    this.publicVotes = [40, 20, 30, 10];
+    let likelyCorrectAnswers = [];
+    this.quizz.categories[this.currentQuestionIndex].answers.map((a) => {
+      if (!a.isCorrect) {
+        if (
+          likelyCorrectAnswers.includes(true) &&
+          likelyCorrectAnswers.length < 2
+        ) {
+          likelyCorrectAnswers.push(a.isCorrect);
+          a.vote = 35;
+        } else if (
+          !likelyCorrectAnswers.includes(true) &&
+          likelyCorrectAnswers.length < 1
+        ) {
+          likelyCorrectAnswers.push(a.isCorrect);
+          a.vote = 35;
+        } else {
+          a.vote = 15;
+        }
+      } else {
+        a.vote = 35;
+      }
+    });
   }
 
   private _updateDisplayedAnswers(): void {

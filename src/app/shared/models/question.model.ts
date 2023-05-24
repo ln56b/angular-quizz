@@ -3,6 +3,7 @@ export interface Answer {
   questionId: number;
   label: string;
   isCorrect: boolean;
+  vote?: number;
 }
 
 export interface Question {

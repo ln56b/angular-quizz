@@ -14,6 +14,7 @@
 
     <div class="flex flex-col">
       <ng-container *ngIf="!isCompleted; else endedQuizz">
+        <!-- generic info -->
         <div class="flex justify-between">
           <div class="flex gap-3">
             <button
@@ -59,25 +60,15 @@
           class="my-3"
         ></mat-progress-bar>
 
+        <!-- questions & answers -->
         <div class="flex flex-col items-center my-5">
           <h3 class="p-3 text-xl">
             {{ quizz.categories[currentQuestionIndex]?.question.text }}
           </h3>
 
-          <ng-container *ngIf="displayPublicVotes">
-            <p>A</p>
-            {{ publicVotes[0] }}%
-            <p>B</p>
-            {{ publicVotes[1] }}%
-            <p>C</p>
-            {{ publicVotes[2] }}%
-            <p>D</p>
-            {{ publicVotes[3] }}%
-          </ng-container>
-
           <div class="flex flex-col items-center gap-3">
             <mat-card
-              *ngFor="let answer of displayedAnswers"
+              *ngFor="let answer of displayedAnswers; let i = index"
               class="my-2 w-[500px]"
             >
               <mat-card-actions>
@@ -86,9 +77,19 @@
                   (click)="provideAnswer(answer)"
                   class="w-[100%]"
                 >
-                  {{ answer?.label }}
+                  {{ i + 1 }} {{ answer?.label }}
                 </button>
               </mat-card-actions>
+
+              <!-- public vote-->
+              <ng-container *ngIf="displayPublicVotes">
+                <mat-progress-bar
+                  mode="determinate"
+                  [value]="answer.vote"
+                ></mat-progress-bar>
+              </ng-container>
+
+              <!-- replay show correct-->
               <mat-progress-bar
                 *ngIf="isReplay && answer.isCorrect"
                 mode="determinate"
