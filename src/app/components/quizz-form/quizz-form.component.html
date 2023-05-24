@@ -77,12 +77,12 @@
                   (click)="provideAnswer(answer)"
                   class="w-[100%]"
                 >
-                  {{ i + 1 }} {{ answer?.label }}
+                  {{ answer?.label }}
                 </button>
               </mat-card-actions>
 
               <!-- public vote-->
-              <ng-container *ngIf="displayPublicVotes">
+              <ng-container *ngIf="displayPublicVotes && !isReplay">
                 <mat-progress-bar
                   mode="determinate"
                   [value]="answer.vote"

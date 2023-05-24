@@ -52,8 +52,8 @@ export class QuizzFormComponent implements OnInit {
         this.isReplay = true;
         quizz.selectedQuestionIndex = 0;
         quizz.userAnswers = [];
-        quizz.canUseFiftyFiftyJoker = true;
-        quizz.canUsePublicVote = true;
+        quizz.canUseFiftyFiftyJoker = false;
+        quizz.canUsePublicVote = false;
         quizz.score = 0;
       }
 
