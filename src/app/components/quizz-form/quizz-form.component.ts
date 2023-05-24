@@ -35,6 +35,7 @@ export class QuizzFormComponent implements OnInit {
   displayedAnswers: Answer[] = [];
   displayPublicVotes = false;
   publicVotes = [];
+  isReplay = false;
 
   private timerSubscription$ = new Subscription();
   private countdownSubscription$ = new Subscription();
@@ -47,10 +48,19 @@ export class QuizzFormComponent implements OnInit {
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.quizzService.getQuizz(id).subscribe((quizz) => {
+      if (quizz.quizzEndTime !== null) {
+        this.isReplay = true;
+        quizz.selectedQuestionIndex = 0;
+        quizz.userAnswers = [];
+        quizz.canUseFiftyFiftyJoker = true;
+        quizz.canUsePublicVote = true;
+        quizz.score = 0;
+      }
+
       this.currentQuestionIndex = quizz.selectedQuestionIndex;
       this.quizz = quizz;
       this.displayedAnswers =
-        this.quizz.categories[this.currentQuestionIndex].answers;
+        this.quizz.categories[this.currentQuestionIndex]?.answers;
     });
 
     this._startTimer();
@@ -80,7 +90,7 @@ export class QuizzFormComponent implements OnInit {
     this.currentQuestionIndex += 1;
     this.missingAnswer = true;
     this.displayedAnswers =
-      this.quizz.categories[this.currentQuestionIndex].answers;
+      this.quizz.categories[this.currentQuestionIndex]?.answers;
     this._startCountdown();
   }
 

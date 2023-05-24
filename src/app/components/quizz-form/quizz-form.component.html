@@ -61,7 +61,7 @@
 
         <div class="flex flex-col items-center my-5">
           <h3 class="p-3 text-xl">
-            {{ quizz.categories[currentQuestionIndex].question.text }}
+            {{ quizz.categories[currentQuestionIndex]?.question.text }}
           </h3>
 
           <ng-container *ngIf="displayPublicVotes">
@@ -89,6 +89,11 @@
                   {{ answer?.label }}
                 </button>
               </mat-card-actions>
+              <mat-progress-bar
+                *ngIf="isReplay && answer.isCorrect"
+                mode="determinate"
+                value="100"
+              ></mat-progress-bar>
             </mat-card>
           </div>
           <button
