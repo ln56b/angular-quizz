@@ -44,6 +44,12 @@ export class QuizzService {
       .pipe(catchError(this.handleError<Quizz>('updateQuizz')));
   }
 
+  deleteQuizz(id: number): Observable<void> {
+    return this.http
+      .delete<void>(`${this.ENDPOINT_URL}/${id}`)
+      .pipe(catchError(this.handleError<void>('deleteQuizz')));
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       console.log(error);

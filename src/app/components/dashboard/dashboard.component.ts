@@ -40,7 +40,7 @@ export class DashboardComponent implements OnInit {
   }
 
   onDeleteQuizz(id: number): void {
-    console.log('TODO'); // TODO
+    this.quizzService.deleteQuizz(id).subscribe();
   }
 
   startQuizz(name: QuizzNames): void {

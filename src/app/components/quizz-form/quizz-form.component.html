@@ -41,10 +41,8 @@
               <span class="font-bold text-primary">{{ totalTimer.min }} </span>
               min
             </ng-container>
-            <ng-container *ngIf="totalTimer.sec > 0">
-              <span class="font-bold text-primary">{{ totalTimer.sec }} </span>
-              sec
-            </ng-container>
+            <span class="font-bold text-primary">{{ totalTimer.sec }} </span>
+            sec
             <p class="pl-3">
               Question
               <span class="font-bold text-primary">{{
@@ -116,12 +114,8 @@
                 </span>
                 min
               </ng-container>
-              <ng-container *ngIf="totalTimer.sec > 0">
-                <span class="font-bold text-primary"
-                  >{{ totalTimer.sec }}
-                </span>
-                sec
-              </ng-container>
+              <span class="font-bold text-primary">{{ totalTimer.sec }} </span>
+              sec
             </h3>
             <p class="text-xl">
               Voici ton score :
