@@ -1,7 +1,19 @@
 <ng-container *ngIf="quizz">
   <div class="p-10">
+    <div class="pb-3">
+      <button
+        mat-flat-button
+        color="lightGray"
+        (click)="endTimer()"
+        routerLink="['/']"
+      >
+        <mat-icon>arrow_back</mat-icon>
+        Retour au dashboard
+      </button>
+    </div>
+
     <div class="flex flex-col">
-      <ng-container *ngIf="isCompleted; else endedQuizz">
+      <ng-container *ngIf="!isCompleted; else endedQuizz">
         <div class="flex justify-between">
           <div class="flex gap-3">
             <button
@@ -22,9 +34,17 @@
               Public vote
             </button>
           </div>
+
           <div class="flex py-3 text-lg">
             <mat-icon color="primary">av_timer</mat-icon>
-            <span class="font-bold text-primary">{{ getTimer }} </span> sec
+            <ng-container *ngIf="totalTimer.min > 0">
+              <span class="font-bold text-primary">{{ totalTimer.min }} </span>
+              min
+            </ng-container>
+            <ng-container *ngIf="totalTimer.sec > 0">
+              <span class="font-bold text-primary">{{ totalTimer.sec }} </span>
+              sec
+            </ng-container>
             <p class="pl-3">
               Question
               <span class="font-bold text-primary">{{
@@ -34,6 +54,12 @@
             </p>
           </div>
         </div>
+
+        <mat-progress-bar
+          mode="buffer"
+          [value]="questionCountdown * 10"
+          class="my-3"
+        ></mat-progress-bar>
 
         <div class="flex flex-col items-center my-5">
           <h3 class="p-3 text-xl">
@@ -84,7 +110,18 @@
           <div class="my-3 text-center">
             <h3 class="p-3 text-xl">
               Tu as terminé le quizz en
-              <span class="font-bold text-primary">{{ timer }}</span> sec
+              <ng-container *ngIf="totalTimer.min > 0">
+                <span class="font-bold text-primary"
+                  >{{ totalTimer.min }}
+                </span>
+                min
+              </ng-container>
+              <ng-container *ngIf="totalTimer.sec > 0">
+                <span class="font-bold text-primary"
+                  >{{ totalTimer.sec }}
+                </span>
+                sec
+              </ng-container>
             </h3>
             <p class="text-xl">
               Voici ton score :

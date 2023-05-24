@@ -1,14 +1,22 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { Subscription, interval } from 'rxjs';
+import { Subscription, interval, startWith } from 'rxjs';
 import { Answer } from 'src/app/shared/models/question.model';
 import { QuizzService } from 'src/app/shared/services/quizz.service';
 import { Quizz } from '../../shared/models/quizz.models';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 const EXTERNAL = [CommonModule, RouterModule];
-const MATERIAL = [MatIconModule];
+const MATERIAL = [
+  MatIconModule,
+  MatButtonModule,
+  MatCardModule,
+  MatProgressBarModule,
+];
 
 @Component({
   selector: 'app-quizz-form',
@@ -22,10 +30,14 @@ export class QuizzFormComponent implements OnInit {
   currentQuestionIndex = 0;
   isCompleted = false;
   missingAnswer = true;
-  timer = 0;
+  totalTimer = { min: 0, sec: 0 };
+  questionCountdown = 10;
   displayedAnswers: Answer[] = [];
+  displayPublicVotes = false;
+  publicVotes = [];
 
-  private subscription = new Subscription();
+  private timerSubscription$ = new Subscription();
+  private countdownSubscription$ = new Subscription();
 
   constructor(
     private quizzService: QuizzService,
@@ -35,12 +47,14 @@ export class QuizzFormComponent implements OnInit {
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.quizzService.getQuizz(id).subscribe((quizz) => {
+      this.currentQuestionIndex = quizz.selectedQuestionIndex;
       this.quizz = quizz;
       this.displayedAnswers =
         this.quizz.categories[this.currentQuestionIndex].answers;
     });
 
-    this.subscription = interval(1000).subscribe(() => this.getTimer);
+    this._startTimer();
+    this._startCountdown();
   }
 
   provideAnswer(answer: Answer): void {
@@ -48,41 +62,73 @@ export class QuizzFormComponent implements OnInit {
     this.quizz.userAnswers.push(answer);
     this._updateScore(answer);
 
+    this._saveInProgressQuizz();
+
     if (this.currentQuestionIndex + 1 === this.quizz.categories.length) {
       this.quizz.quizzEndTime = new Date();
       this._endQuizz();
     }
+
+    if (this.displayPublicVotes) {
+      this.displayPublicVotes = false;
+    }
   }
 
   goToNextQuestion(): void {
+    this.countdownSubscription$.unsubscribe();
+    this.questionCountdown = 10;
     this.currentQuestionIndex += 1;
     this.missingAnswer = true;
     this.displayedAnswers =
       this.quizz.categories[this.currentQuestionIndex].answers;
+    this._startCountdown();
   }
 
   useJoker(joker: 'fifty-fifty' | 'public-vote'): void {
-    this._updateDisplayedAnswers();
     if (joker === 'fifty-fifty') {
+      this._updateDisplayedAnswers();
       this.quizz.canUseFiftyFiftyJoker = false;
     } else if ('public-vote') {
+      this._getPublicVotes();
       this.quizz.canUsePublicVote = false;
     }
   }
 
-  private _updateDisplayedAnswers(): void {
-    const isCorrect = this.quizz.categories[
-      this.currentQuestionIndex
-    ].answers.find((a) => a.isCorrect);
+  endTimer(): void {
+    this.timerSubscription$.unsubscribe();
+  }
+
+  private _getPublicVotes(): void {
+    // TODO
+    this.displayPublicVotes = true;
     const answers = this.quizz.categories[this.currentQuestionIndex].answers;
-    const randomWrong = answers[Math.floor(Math.random() * answers.length)];
+
+    const isCorrect = answers.find((a) => a.isCorrect);
+    this.publicVotes = [40, 20, 30, 10];
+  }
+
+  private _updateDisplayedAnswers(): void {
+    const answers = this.quizz.categories[this.currentQuestionIndex].answers;
+    const isCorrect = answers.find((a) => a.isCorrect);
+    const randomWrong = answers.filter((a) => !a.isCorrect)[
+      Math.floor(Math.random() * answers.length)
+    ];
 
     this.displayedAnswers = [isCorrect, randomWrong];
   }
 
+  private _saveInProgressQuizz(): void {
+    this.quizz.selectedQuestionIndex = this.currentQuestionIndex;
+    console.log(this.quizz);
+    this.quizzService.updateQuizz(this.quizz).subscribe(); // TODO store
+  }
+
   private _endQuizz(): void {
     this.isCompleted = true;
-    this.subscription.unsubscribe();
+    localStorage.setItem('totalMin', '0');
+    localStorage.setItem('totalSec', '0');
+    this.endTimer();
+    this.countdownSubscription$.unsubscribe();
     this.quizzService.updateQuizz(this.quizz).subscribe();
   }
 
@@ -92,10 +138,33 @@ export class QuizzFormComponent implements OnInit {
     }
   }
 
-  get getTimer(): number {
-    return (
-      new Date().getSeconds() -
-      new Date(this.quizz.quizzStartedTime).getSeconds()
-    );
+  private _startTimer(): void {
+    if (localStorage.getItem('totalTimer') !== null) {
+      this.totalTimer = {
+        min: Number(localStorage.getItem('totalTimer.min')),
+        sec: Number(localStorage.getItem('totalTimer.sec')),
+      };
+    }
+    this.timerSubscription$ = interval(1000).subscribe(() => {
+      if (this.totalTimer.sec < 60) {
+        this.totalTimer.sec += 1;
+        localStorage.setItem('totalTimer.sec', this.totalTimer.sec.toString());
+      } else {
+        this.totalTimer.sec = 0;
+        this.totalTimer.min += 1;
+        localStorage.setItem('totalTimer.sec', '0');
+        localStorage.setItem('totalTimer.min', this.totalTimer.min.toString());
+      }
+    });
+  }
+
+  private _startCountdown(): void {
+    this.countdownSubscription$ = interval(1000).subscribe(() => {
+      this.questionCountdown -= 1;
+
+      if (this.questionCountdown <= 0) {
+        this.goToNextQuestion();
+      }
+    });
   }
 }
