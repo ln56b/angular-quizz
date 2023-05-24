@@ -17,12 +17,16 @@
     </ng-container>
 
     <ng-container matColumnDef="total-time">
-      <th mat-header-cell *matHeaderCellDef>Temps total (sec)</th>
-      <td mat-cell *matCellDef="let element">{{ element.totalTime }}</td>
+      <th mat-header-cell *matHeaderCellDef>Temps total</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.totalTime.min }}min {{ element.totalTime.sec }}sec
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="average-time">
-      <th mat-header-cell *matHeaderCellDef>Temps moyen (sec)</th>
+      <th mat-header-cell *matHeaderCellDef>
+        Temps moyen <br />/ question (sec)
+      </th>
       <td mat-cell *matCellDef="let element">{{ element.averageTime }}</td>
     </ng-container>
 

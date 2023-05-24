@@ -1,6 +1,6 @@
 <ng-container *ngIf="quizz">
   <div class="p-10">
-    <div class="pb-3">
+    <div *ngIf="!isCompleted" class="pb-3">
       <button
         mat-flat-button
         color="lightGray"

@@ -20,8 +20,13 @@ export interface Quizz {
 }
 
 export interface QuizzHistory extends Quizz {
-  totalTime: number;
+  totalTime: Duration;
   averageTime: number;
+}
+
+export interface Duration {
+  min: number;
+  sec: number;
 }
 
 export enum QuizzNames {
