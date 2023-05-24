@@ -92,6 +92,7 @@ export class QuizzFormComponent implements OnInit {
       this._getPublicVotes();
       this.quizz.canUsePublicVote = false;
     }
+    this.quizzService.updateQuizz(this.quizz).subscribe();
   }
 
   endTimer(): void {
@@ -118,9 +119,8 @@ export class QuizzFormComponent implements OnInit {
   }
 
   private _saveInProgressQuizz(): void {
-    this.quizz.selectedQuestionIndex = this.currentQuestionIndex;
-    console.log(this.quizz);
-    this.quizzService.updateQuizz(this.quizz).subscribe(); // TODO store
+    this.quizz.selectedQuestionIndex = this.currentQuestionIndex + 1;
+    this.quizzService.updateQuizz(this.quizz).subscribe();
   }
 
   private _endQuizz(): void {

@@ -46,7 +46,7 @@
             <p class="pl-3">
               Question
               <span class="font-bold text-primary">{{
-                quizz.selectedQuestionIndex + 1
+                currentQuestionIndex + 1
               }}</span
               >/10
             </p>
@@ -86,7 +86,7 @@
                   (click)="provideAnswer(answer)"
                   class="w-[100%]"
                 >
-                  {{ answer.label }}
+                  {{ answer?.label }}
                 </button>
               </mat-card-actions>
             </mat-card>
