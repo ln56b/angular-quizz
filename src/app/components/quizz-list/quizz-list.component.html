@@ -19,7 +19,12 @@
     <ng-container matColumnDef="total-time">
       <th mat-header-cell *matHeaderCellDef>Temps total</th>
       <td mat-cell *matCellDef="let element">
-        {{ element.totalTime.min }}min {{ element.totalTime.sec }}sec
+        <ng-container *ngIf="element.totalTime.min > 0"
+          >{{ element.totalTime.min }} min
+        </ng-container>
+        <ng-container *ngIf="element.totalTime.sec > 0">
+          {{ element.totalTime.sec }} sec
+        </ng-container>
       </td>
     </ng-container>
 

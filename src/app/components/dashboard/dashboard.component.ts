@@ -44,7 +44,7 @@ export class DashboardComponent implements OnInit {
 
         let totalTime: Duration = {
           min: minutes,
-          sec: seconds,
+          sec: seconds - 1,
         };
 
         return {
