@@ -137,10 +137,9 @@ export class QuizzFormComponent implements OnInit {
   private _updateDisplayedAnswers(): void {
     const answers = this.quizz.categories[this.currentQuestionIndex].answers;
     const isCorrect = answers.find((a) => a.isCorrect);
-    const randomWrong = answers.filter((a) => !a.isCorrect)[
-      Math.floor(Math.random() * answers.length)
-    ];
-
+    const wrongAnswers = answers.filter((a) => !a.isCorrect);
+    const randomWrong =
+      wrongAnswers[Math.floor(Math.random() * wrongAnswers.length)];
     this.displayedAnswers = [isCorrect, randomWrong];
   }
 
@@ -153,8 +152,7 @@ export class QuizzFormComponent implements OnInit {
     this.quizz.isCompleted = true;
     this.quizz.totalTime.min = this.totalTimer.min;
     this.quizz.totalTime.sec = this.totalTimer.sec;
-    localStorage.setItem('totalMin', '0');
-    localStorage.setItem('totalSec', '0');
+
     this.endTimer();
     this.countdownSubscription$.unsubscribe();
     this.quizzService.updateQuizz(this.quizz).subscribe();
@@ -182,6 +180,10 @@ export class QuizzFormComponent implements OnInit {
         this.totalTimer.min += 1;
         localStorage.setItem('totalTimer.sec', '0');
         localStorage.setItem('totalTimer.min', this.totalTimer.min.toString());
+      }
+
+      if (this.currentQuestionIndex + 1 === this.quizz.categories.length) {
+        this._endQuizz();
       }
     });
   }
