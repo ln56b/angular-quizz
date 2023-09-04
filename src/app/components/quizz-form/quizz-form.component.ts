@@ -28,7 +28,6 @@ const MATERIAL = [
 export class QuizzFormComponent implements OnInit {
   quizz: Quizz | null = null;
   currentQuestionIndex = 0;
-  isCompleted = false;
   missingAnswer = true;
   totalTimer = { min: 0, sec: 0 };
   questionCountdown = 10;
@@ -48,7 +47,7 @@ export class QuizzFormComponent implements OnInit {
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.quizzService.getQuizz(id).subscribe((quizz) => {
-      if (quizz.quizzEndTime !== null) {
+      if (quizz.isCompleted) {
         this.isReplay = true;
         quizz.selectedQuestionIndex = 0;
         quizz.userAnswers = [];
@@ -75,7 +74,6 @@ export class QuizzFormComponent implements OnInit {
     this._saveInProgressQuizz();
 
     if (this.currentQuestionIndex + 1 === this.quizz.categories.length) {
-      this.quizz.quizzEndTime = new Date();
       this._endQuizz();
     }
 
@@ -152,7 +150,9 @@ export class QuizzFormComponent implements OnInit {
   }
 
   private _endQuizz(): void {
-    this.isCompleted = true;
+    this.quizz.isCompleted = true;
+    this.quizz.totalTime.min = this.totalTimer.min;
+    this.quizz.totalTime.sec = this.totalTimer.sec;
     localStorage.setItem('totalMin', '0');
     localStorage.setItem('totalSec', '0');
     this.endTimer();
@@ -190,7 +190,7 @@ export class QuizzFormComponent implements OnInit {
     this.countdownSubscription$ = interval(1000).subscribe(() => {
       this.questionCountdown -= 1;
 
-      if (this.questionCountdown <= 0) {
+      if (this.questionCountdown === 0) {
         this.goToNextQuestion();
       }
     });

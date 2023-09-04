@@ -1,6 +1,6 @@
 <ng-container *ngIf="quizz">
   <div class="p-10">
-    <div *ngIf="!isCompleted" class="pb-3">
+    <div *ngIf="!quizz.isCompleted" class="pb-3">
       <button
         mat-flat-button
         color="lightGray"
@@ -13,7 +13,7 @@
     </div>
 
     <div class="flex flex-col">
-      <ng-container *ngIf="!isCompleted; else endedQuizz">
+      <ng-container *ngIf="!quizz.isCompleted; else endedQuizz">
         <!-- generic info -->
         <div class="flex justify-between">
           <div class="flex gap-3">

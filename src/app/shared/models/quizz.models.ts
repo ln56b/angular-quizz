@@ -15,12 +15,11 @@ export interface Quizz {
   canUsePublicVote: boolean;
   score: number;
   userAnswers: Answer[];
-  quizzStartedTime: Date;
-  quizzEndTime: Date;
+  isCompleted: boolean;
+  totalTime: Duration;
 }
 
 export interface QuizzHistory extends Quizz {
-  totalTime: Duration;
   averageTime: number;
 }
 

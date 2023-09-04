@@ -31,26 +31,9 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.quizzService.loadQuizzes().subscribe((quizzes) => {
       this.quizzes = quizzes.map((q) => {
-        const minutes = this._getDuration(
-          q.quizzStartedTime,
-          q.quizzEndTime,
-          'min'
-        );
-        const seconds = this._getDuration(
-          q.quizzStartedTime,
-          q.quizzEndTime,
-          'sec'
-        );
-
-        let totalTime: Duration = {
-          min: minutes,
-          sec: seconds - 1,
-        };
-
         return {
           ...q,
-          totalTime,
-          averageTime: (minutes * 60 + seconds) / 10,
+          averageTime: (q.totalTime.min * 60 + q.totalTime.sec) / 10,
         };
       });
     });
@@ -64,11 +47,5 @@ export class DashboardComponent implements OnInit {
     this.quizzService.startQuizz(name).subscribe((quizz) => {
       this.router.navigate(['/', 'quizz', 'edit', quizz.id]);
     });
-  }
-
-  private _getDuration(start: Date, end: Date, format: 'min' | 'sec'): number {
-    return format === 'min'
-      ? new Date(end).getMinutes() - new Date(start).getMinutes()
-      : new Date(end).getSeconds() - new Date(start).getSeconds();
   }
 }
