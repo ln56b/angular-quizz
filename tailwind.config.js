@@ -3,7 +3,8 @@ const plugin = require("tailwindcss/plugin");
 /** @type {import('tailwindcss').Config} */
 
 module.exports = {
-  purge: ["./src/**/*.{html,ts}"],
+  purge: ["./src/**/*.{html,ts}"], 
+  darkMode: 'class', // or 'media' or 'class
   theme: {
     fill: {
       primary: "#3F51B5",
@@ -28,6 +29,12 @@ module.exports = {
       xl: ["26px", "34px"],
     },
     extend: {},
+  },
+  variants: {
+    extend: {
+      backgroundColor: ["active"],
+      textColor: ["active"],
+    },
   },
   plugins: [
     plugin(({ addBase, theme }) => {
