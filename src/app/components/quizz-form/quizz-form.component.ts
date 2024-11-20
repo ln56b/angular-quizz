@@ -96,7 +96,7 @@ export class QuizzFormComponent implements OnInit {
     if (joker === 'fifty-fifty') {
       this._updateDisplayedAnswers();
       this.quizz.canUseFiftyFiftyJoker = false;
-    } else if ('public-vote') {
+    } else if (joker === 'public-vote') {
       this._getPublicVotes();
       this.quizz.canUsePublicVote = false;
     }

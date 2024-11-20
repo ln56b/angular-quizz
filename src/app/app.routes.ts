@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { QuizzFormComponent } from './components/quizz-form/quizz-form.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   {
     path: 'dashboard',
@@ -18,9 +18,3 @@ const routes: Routes = [
     redirectTo: 'dashboard',
   },
 ];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
-})
-export class AppRoutingModule {}
