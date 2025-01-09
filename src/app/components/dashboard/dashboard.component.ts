@@ -30,7 +30,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.quizzService.loadQuizzes().subscribe((quizzes) => {
-      this.quizzes = quizzes.map((q) => {
+      this.quizzes = quizzes?.map((q) => {
         return {
           ...q,
           averageTime: (q.totalTime.min * 60 + q.totalTime.sec) / 10,

@@ -1,147 +1,143 @@
-<ng-container *ngIf="quizz">
-  <div class="p-10">
-    <div *ngIf="!quizz.isCompleted" class="pb-3">
+@if (quizz) {
+<div class="p-10">
+  @if (!quizz.isCompleted) {
+  <div class="pb-3">
+    <button
+      mat-flat-button
+      color="lightGray"
+      (click)="endTimer()"
+      routerLink="['/']"
+    >
+      <mat-icon>arrow_back</mat-icon>
+      Retour au dashboard
+    </button>
+  </div>
+  }
+
+  <div class="flex flex-col">
+    @if (!quizz.isCompleted) {
+    <!-- generic info -->
+    <div class="flex justify-between">
+      <div class="flex gap-3">
+        <button
+          mat-flat-button
+          color="primary"
+          [disabled]="!quizz.canUseFiftyFiftyJoker"
+          (click)="useJoker('fifty-fifty')"
+        >
+          50 / 50
+        </button>
+
+        <button
+          mat-flat-button
+          color="primary"
+          [disabled]="!quizz.canUsePublicVote"
+          (click)="useJoker('public-vote')"
+        >
+          Public vote
+        </button>
+      </div>
+
+      <div class="flex py-3 text-lg">
+        <mat-icon color="primary">av_timer</mat-icon>
+        @if (totalTimer.min > 0) {
+        <span class="font-bold text-primary">{{ totalTimer.min }} </span>
+        min }
+
+        <span class="font-bold text-primary">{{ totalTimer.sec }} </span>
+        sec
+        <p class="pl-3">
+          Question
+          <span class="font-bold text-primary">{{
+            currentQuestionIndex + 1
+          }}</span
+          >/10
+        </p>
+      </div>
+    </div>
+
+    <mat-progress-bar
+      mode="buffer"
+      [value]="(questionCountdown - 1) * 11"
+      class="my-3"
+    ></mat-progress-bar>
+
+    <!-- questions & answers -->
+    <div class="flex flex-col items-center my-5">
+      <h3 class="p-3 text-xl">
+        {{ quizz.categories[currentQuestionIndex]?.question.text }}
+      </h3>
+
+      <div class="flex flex-col items-center gap-3">
+        <mat-card
+          *ngFor="let answer of displayedAnswers; let i = index"
+          class="my-2 w-[500px]"
+        >
+          <mat-card-actions>
+            <button
+              mat-button
+              (click)="provideAnswer(answer)"
+              class="w-[100%] focus:ring-4"
+            >
+              {{ answer?.label }}
+            </button>
+          </mat-card-actions>
+
+          <!-- public vote-->
+          @if (displayPublicVotes && !isReplay) {
+          <mat-progress-bar
+            mode="determinate"
+            [value]="answer.vote"
+          ></mat-progress-bar>
+          } @if(isReplay && answer.isCorrect) {
+          <!-- replay show correct-->
+          <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>
+          }
+        </mat-card>
+      </div>
       <button
         mat-flat-button
-        color="lightGray"
-        (click)="endTimer()"
-        routerLink="['/']"
+        color="primary"
+        [disabled]="missingAnswer"
+        (click)="goToNextQuestion()"
+        class="self-end mt-3"
       >
-        <mat-icon>arrow_back</mat-icon>
-        Retour au dashboard
+        question suivante
       </button>
     </div>
 
-    <div class="flex flex-col">
-      <ng-container *ngIf="!quizz.isCompleted; else endedQuizz">
-        <!-- generic info -->
-        <div class="flex justify-between">
-          <div class="flex gap-3">
-            <button
-              mat-flat-button
-              color="primary"
-              [disabled]="!quizz.canUseFiftyFiftyJoker"
-              (click)="useJoker('fifty-fifty')"
-            >
-              50 / 50
-            </button>
+    } @else {
 
-            <button
-              mat-flat-button
-              color="primary"
-              [disabled]="!quizz.canUsePublicVote"
-              (click)="useJoker('public-vote')"
-            >
-              Public vote
-            </button>
-          </div>
-
-          <div class="flex py-3 text-lg">
-            <mat-icon color="primary">av_timer</mat-icon>
-            <ng-container *ngIf="totalTimer.min > 0">
-              <span class="font-bold text-primary">{{ totalTimer.min }} </span>
-              min
-            </ng-container>
+    <ng-template #endedQuizz>
+      <mat-card class="flex flex-col items-center py-3">
+        <div class="my-3 text-center">
+          <h3 class="p-3 text-xl">
+            Tu as terminé le quizz en @if (totalTimer.min > 0) {
+            <span class="font-bold text-primary">{{ totalTimer.min }} </span>
+            min }
             <span class="font-bold text-primary">{{ totalTimer.sec }} </span>
             sec
-            <p class="pl-3">
-              Question
-              <span class="font-bold text-primary">{{
-                currentQuestionIndex + 1
-              }}</span
-              >/10
-            </p>
-          </div>
+          </h3>
+          <p class="text-xl">
+            Voici ton score :
+            <span class="font-bold text-primary">{{ quizz.score }}</span
+            >/10
+          </p>
         </div>
 
-        <mat-progress-bar
-          mode="buffer"
-          [value]="(questionCountdown - 1) * 11"
-          class="my-3"
-        ></mat-progress-bar>
-
-        <!-- questions & answers -->
-        <div class="flex flex-col items-center my-5">
-          <h3 class="p-3 text-xl">
-            {{ quizz.categories[currentQuestionIndex]?.question.text }}
-          </h3>
-
-          <div class="flex flex-col items-center gap-3">
-            <mat-card
-              *ngFor="let answer of displayedAnswers; let i = index"
-              class="my-2 w-[500px]"
-            >
-              <mat-card-actions>
-                <button
-                  mat-button
-                  (click)="provideAnswer(answer)"
-                  class="w-[100%] focus:ring-4"
-                >
-                  {{ answer?.label }}
-                </button>
-              </mat-card-actions>
-
-              <!-- public vote-->
-              <ng-container *ngIf="displayPublicVotes && !isReplay">
-                <mat-progress-bar
-                  mode="determinate"
-                  [value]="answer.vote"
-                ></mat-progress-bar>
-              </ng-container>
-
-              <!-- replay show correct-->
-              <mat-progress-bar
-                *ngIf="isReplay && answer.isCorrect"
-                mode="determinate"
-                value="100"
-              ></mat-progress-bar>
-            </mat-card>
-          </div>
+        <mat-card-actions>
           <button
             mat-flat-button
             color="primary"
-            [disabled]="missingAnswer"
-            (click)="goToNextQuestion()"
-            class="self-end mt-3"
+            routerLink="['/']"
+            class="mt-3"
           >
-            question suivante
+            Voir le ranking
           </button>
-        </div>
-      </ng-container>
-
-      <ng-template #endedQuizz>
-        <mat-card class="flex flex-col items-center py-3">
-          <div class="my-3 text-center">
-            <h3 class="p-3 text-xl">
-              Tu as terminé le quizz en
-              <ng-container *ngIf="totalTimer.min > 0">
-                <span class="font-bold text-primary"
-                  >{{ totalTimer.min }}
-                </span>
-                min
-              </ng-container>
-              <span class="font-bold text-primary">{{ totalTimer.sec }} </span>
-              sec
-            </h3>
-            <p class="text-xl">
-              Voici ton score :
-              <span class="font-bold text-primary">{{ quizz.score }}</span
-              >/10
-            </p>
-          </div>
-
-          <mat-card-actions>
-            <button
-              mat-flat-button
-              color="primary"
-              routerLink="['/']"
-              class="mt-3"
-            >
-              Voir le ranking
-            </button>
-          </mat-card-actions>
-        </mat-card>
-      </ng-template>
-    </div>
+        </mat-card-actions>
+      </mat-card>
+    </ng-template>
+    }
   </div>
-</ng-container>
+</div>
+}

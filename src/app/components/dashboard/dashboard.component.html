@@ -26,16 +26,16 @@
 
   <section class="flex flex-col">
     <h2 class="self-center p-3 text-xl">Ranking</h2>
+    @if (quizzes?.length) {
     <app-quizz-list
       class="m-2"
-      *ngIf="quizzes.length; else noQuizzes"
       [quizzes]="quizzes"
       (deleteQuizzEvent)="onDeleteQuizz($event)"
     ></app-quizz-list>
-    <ng-template #noQuizzes>
-      <p class="self-center p-2 text-lightGray text-l">
-        Aucun score à afficher. Tu n'as pas encore joué à un quizz.
-      </p>
-    </ng-template>
+    } @else {
+    <p class="self-center p-2 text-lightGray text-l">
+      Aucun score à afficher. Tu n'as pas encore joué à un quizz.
+    </p>
+    }
   </section>
 </div>

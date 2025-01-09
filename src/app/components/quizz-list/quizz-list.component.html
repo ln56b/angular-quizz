@@ -1,99 +1,91 @@
-<ng-container *ngIf="quizzes.length">
-  <table mat-table [dataSource]="quizzes" class="mat-elevation-z8">
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef class="flex-col justify-center">
-        Nom
-      </th>
-      <td mat-cell *matCellDef="let element" class="justify-center text-center">
-        {{ element.name === quizzNames.HEADS ? "All Stars" : "Challengers" }}
-      </td>
-    </ng-container>
+@if (quizzes.length) {
+<table mat-table [dataSource]="quizzes" class="mat-elevation-z8">
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef class="flex-col justify-center">
+      Nom
+    </th>
+    <td mat-cell *matCellDef="let element" class="justify-center text-center">
+      {{ element.name === quizzNames.HEADS ? "All Stars" : "Challengers" }}
+    </td>
+  </ng-container>
 
-    <ng-container matColumnDef="score">
-      <th mat-header-cell *matHeaderCellDef>Score</th>
-      <td mat-cell *matCellDef="let element">
-        {{ element.score }}
-      </td>
-    </ng-container>
+  <ng-container matColumnDef="score">
+    <th mat-header-cell *matHeaderCellDef>Score</th>
+    <td mat-cell *matCellDef="let element">
+      {{ element.score }}
+    </td>
+  </ng-container>
 
-    <ng-container matColumnDef="total-time">
-      <th mat-header-cell *matHeaderCellDef>Temps total</th>
-      <td mat-cell *matCellDef="let element">
-        <ng-container *ngIf="element.totalTime.min > 0"
-          >{{ element.totalTime.min }} min
-        </ng-container>
-        <ng-container *ngIf="element.totalTime.sec > 0">
-          {{ element.totalTime.sec }} sec
-        </ng-container>
-      </td>
-    </ng-container>
+  <ng-container matColumnDef="total-time">
+    <th mat-header-cell *matHeaderCellDef>Temps total</th>
+    <td mat-cell *matCellDef="let element">
+      @if (element.totalTime.min > 0) {
+      {{ element.totalTime.min }} min } @if (element.totalTime.sec > 0) {
+      {{ element.totalTime.sec }} sec }
+    </td>
+  </ng-container>
 
-    <ng-container matColumnDef="average-time">
-      <th mat-header-cell *matHeaderCellDef>
-        Temps moyen <br />/ question (sec)
-      </th>
-      <td mat-cell *matCellDef="let element">{{ element.averageTime }}</td>
-    </ng-container>
+  <ng-container matColumnDef="average-time">
+    <th mat-header-cell *matHeaderCellDef>
+      Temps moyen <br />/ question (sec)
+    </th>
+    <td mat-cell *matCellDef="let element">{{ element.averageTime }}</td>
+  </ng-container>
 
-    <ng-container matColumnDef="50-50">
-      <th mat-header-cell *matHeaderCellDef>50/50</th>
-      <td mat-cell *matCellDef="let element">
-        <mat-icon
-          *ngIf="element.canUseFiftyFiftyJoker; else alreadyUsedFiftyFifty"
-          color="primary"
-          >hourglass_full</mat-icon
-        >
-        <ng-template #alreadyUsedFiftyFifty>
-          <mat-icon color="white">hourglass_empty</mat-icon>
-        </ng-template>
-      </td>
-    </ng-container>
+  <ng-container matColumnDef="50-50">
+    <th mat-header-cell *matHeaderCellDef>50/50</th>
+    <td mat-cell *matCellDef="let element">
+      @if (element.canUseFiftyFiftyJoker) {
+      <mat-icon color="primary">hourglass_full</mat-icon>
+      } @else {
+      <mat-icon color="white">hourglass_empty</mat-icon>
 
-    <ng-container matColumnDef="public-vote">
-      <th mat-header-cell *matHeaderCellDef>Vote du public</th>
-      <td mat-cell *matCellDef="let element">
-        <mat-icon
-          *ngIf="element.canUsePublicVote; else alreadyUsedPublicVote"
-          color="primary"
-          >hourglass_full</mat-icon
-        >
-        <ng-template #alreadyUsedPublicVote>
-          <mat-icon color="white">hourglass_empty</mat-icon>
-        </ng-template>
-      </td>
-    </ng-container>
+      }
+    </td>
+  </ng-container>
 
-    <ng-container matColumnDef="replay">
-      <th mat-header-cell *matHeaderCellDef>Actions</th>
-      <td mat-cell *matCellDef="let element">
-        <button
-          mat-icon-button
-          aria-label="Example icon button with a vertical three dot icon"
-          [matMenuTriggerFor]="menu"
-        >
-          <mat-icon color="primary">more_vert</mat-icon>
-          <mat-menu #menu="matMenu">
-            <button
-              [routerLink]="['/', 'quizz', 'edit', element.id]"
-              mat-menu-item
-            >
-              Rejouer<mat-icon color="primary">replay</mat-icon>
-            </button>
-            <button (click)="deleteQuizz(element.id)" mat-menu-item>
-              Supprimer<mat-icon color="primary">delete</mat-icon>
-            </button>
-          </mat-menu>
-        </button>
-      </td>
+  <ng-container matColumnDef="public-vote">
+    <th mat-header-cell *matHeaderCellDef>Vote du public</th>
+    <td mat-cell *matCellDef="let element">
+      @if (element.canUsePublicVote) {
+      <mat-icon color="primary">hourglass_full</mat-icon>
+      }@else {
+      <mat-icon color="white">hourglass_empty</mat-icon>
+      }
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="replay">
+    <th mat-header-cell *matHeaderCellDef>Actions</th>
+    <td mat-cell *matCellDef="let element">
       <button
         mat-icon-button
         aria-label="Example icon button with a vertical three dot icon"
+        [matMenuTriggerFor]="menu"
       >
-        <mat-icon>more_vert</mat-icon>
+        <mat-icon color="primary">more_vert</mat-icon>
+        <mat-menu #menu="matMenu">
+          <button
+            [routerLink]="['/', 'quizz', 'edit', element.id]"
+            mat-menu-item
+          >
+            Rejouer<mat-icon color="primary">replay</mat-icon>
+          </button>
+          <button (click)="deleteQuizz(element.id)" mat-menu-item>
+            Supprimer<mat-icon color="primary">delete</mat-icon>
+          </button>
+        </mat-menu>
       </button>
-    </ng-container>
+    </td>
+    <button
+      mat-icon-button
+      aria-label="Example icon button with a vertical three dot icon"
+    >
+      <mat-icon>more_vert</mat-icon>
+    </button>
+  </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="tableHeaders"></tr>
-    <tr mat-row *matRowDef="let row; columns: tableHeaders"></tr>
-  </table>
-</ng-container>
+  <tr mat-header-row *matHeaderRowDef="tableHeaders"></tr>
+  <tr mat-row *matRowDef="let row; columns: tableHeaders"></tr>
+</table>
+}
