@@ -69,10 +69,8 @@
       </h3>
 
       <div class="flex flex-col items-center gap-3">
-        <mat-card
-          *ngFor="let answer of displayedAnswers; let i = index"
-          class="my-2 w-[500px]"
-        >
+        @for (answer of displayedAnswers; track $index) {
+        <mat-card class="my-2 w-[500px]">
           <mat-card-actions>
             <button
               mat-button
@@ -94,6 +92,7 @@
           <mat-progress-bar mode="determinate" value="100"></mat-progress-bar>
           }
         </mat-card>
+        }
       </div>
       <button
         mat-flat-button
