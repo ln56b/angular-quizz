@@ -29,3 +29,11 @@ Application web front-end permettant à un utilisateur de jouer à des quizz et 
 - [API Back-end](https://github.com/ln56b/nestjs-quizz)
 
 ## Aperçu du projet
+
+
+https://github.com/user-attachments/assets/b75432a5-6edf-487d-ab40-0518a6e7ec7a
+
+
+
+
+
